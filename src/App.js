@@ -6,6 +6,7 @@ class App extends Component {
     super(props)
 
     this.localVideoref = React.createRef()
+    this.localVideoref.muted = true
     this.remoteVideoref = React.createRef()
 
     this.socket = null
@@ -68,11 +69,16 @@ class App extends Component {
       this.remoteVideoref.current.srcObject = e.streams[0]
     }
 
-    const constraints = { audio: true, echoCancellation: true, video: true,aspectRatio: {ideal: 16/9} }
+    const constraints = {
+      audio: true,
+      video: { aspectRatio: { ideal: 16 / 9 } }
+    }
 
     const success = (stream) => {
       window.localStream = stream
-      this.localVideoref.current.srcObject = stream.getVideoTracks()
+      this.localVideoref.current.srcObject = stream
+      window.localStream.getAudioTracks()[0].enabled=false
+
       // this.pc.addStream(stream)
       stream.getTracks().forEach(track => this.pc.addTrack(track, stream));
     }
