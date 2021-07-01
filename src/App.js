@@ -1,8 +1,8 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import io from 'socket.io-client'
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
 
     this.localVideoref = React.createRef()
@@ -12,7 +12,7 @@ class App extends Component {
     this.candidates = []
   }
 
-  componentDidMount(){
+  componentDidMount() {
 
     this.socket = io(
       '/webrtcPeer',
@@ -38,26 +38,26 @@ class App extends Component {
       // this.candidates = [...this.candidates, candidate]
       this.pc.addIceCandidate(new RTCIceCandidate(candidate))
     })
-    
+
     //const pc_config = null
 
-     const pc_config = {
+    const pc_config = {
       "iceServers": [
-    //     {
-    //       urls: 'stun:[STUN_IP]:[PORT]',
-    //       'credentials': '[YOR CREDENTIALS]',
-    //       'username': '[USERNAME]'
-    //     }
-            {
-              urls: 'stun:stun.l.google.com:19302'
-            }
+        //     {
+        //       urls: 'stun:[STUN_IP]:[PORT]',
+        //       'credentials': '[YOR CREDENTIALS]',
+        //       'username': '[USERNAME]'
+        //     }
+        {
+          urls: 'stun:stun.l.google.com:19302'
+        }
       ]
     }
 
     this.pc = new RTCPeerConnection(pc_config)
 
-    this.pc.onicecandidate=(e) =>{
-      if(e.candidate)this.sendToPeer('candidate', e.candidate)
+    this.pc.onicecandidate = (e) => {
+      if (e.candidate) this.sendToPeer('candidate', e.candidate)
     }
 
     this.pc.oniceconnectionstatechange = (e) => {
@@ -68,7 +68,7 @@ class App extends Component {
       this.remoteVideoref.current.srcObject = e.streams[0]
     }
 
-    const constraints = {audio:true, echoCancellation: true, video:true}
+    const constraints = { audio: true, echoCancellation: true, video: true }
 
     const success = (stream) => {
       window.localStream = stream
@@ -82,8 +82,8 @@ class App extends Component {
     }
 
     navigator.mediaDevices.getUserMedia(constraints, success, failure)
-    .then(success)
-    .catch(failure)
+      .then(success)
+      .catch(failure)
   }
 
   sendToPeer = (messageType, payload) => {
@@ -93,24 +93,24 @@ class App extends Component {
     })
   }
 
-      /* ACTION METHODS FROM THE BUTTONS ON SCREEN */
+  /* ACTION METHODS FROM THE BUTTONS ON SCREEN */
 
-    createOffer = () => {
+  createOffer = () => {
     console.log('Offer')
     this.pc.createOffer({ offerToReceiveVideo: 1 })
       .then(sdp => {
         this.pc.setLocalDescription(sdp)
         this.sendToPeer('offerOrAnswer', sdp)
-    },e=> {})
-    }
+      }, e => { })
+  }
 
-    setRemoteDescription = () => {
-      // retrieve and parse the SDP copied from the remote peer
-      const desc = JSON.parse(this.textref.value)
-  
-      // set sdp as remote description
-      this.pc.setRemoteDescription(new RTCSessionDescription(desc))
-    }
+  setRemoteDescription = () => {
+    // retrieve and parse the SDP copied from the remote peer
+    const desc = JSON.parse(this.textref.value)
+
+    // set sdp as remote description
+    this.pc.setRemoteDescription(new RTCSessionDescription(desc))
+  }
 
 
   // creates an SDP answer to an offer received from remote peer
@@ -122,7 +122,7 @@ class App extends Component {
 
         this.pc.setLocalDescription(sdp)
         this.sendToPeer('offerOrAnswer', sdp)
-    })
+      })
   }
 
   addCandidate = () => {
@@ -137,36 +137,36 @@ class App extends Component {
     });
   }
 
-  
 
-  render(){
+
+  render() {
     return (
       <div>
-          <video
+        <video
           style={{
             width: 240, height: 240,
             margin: 5, backgroundColor: 'black'
           }}
-          ref={this.localVideoref} 
+          ref={this.localVideoref}
           autoPlay></video>
-          <video
+        <video
           style={{
             width: 240, height: 240,
             margin: 5, backgroundColor: 'black'
           }}
-          ref={this.remoteVideoref} 
+          ref={this.remoteVideoref}
           autoPlay></video>
 
-<br />
+        <br />
 
-<button onClick={this.createOffer}>Offer</button>
-<button onClick={this.createAnswer}>Answer</button>
+        <button onClick={this.createOffer}>Offer</button>
+        <button onClick={this.createAnswer}>Answer</button>
 
-<br />
-<textarea ref={ref => { this.textref = ref }} />
+        <br />
+        <textarea ref={ref => { this.textref = ref }} />
 
-<br />
-{/* <button onClick={this.setRemoteDescription}>Set Remote Desc</button>
+        <br />
+        {/* <button onClick={this.setRemoteDescription}>Set Remote Desc</button>
 <button onClick={this.addCandidate}>Add Candidate</button> */}
 
       </div>
