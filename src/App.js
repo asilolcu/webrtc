@@ -68,11 +68,11 @@ class App extends Component {
       this.remoteVideoref.current.srcObject = e.streams[0]
     }
 
-    const constraints = { audio: true, echoCancellation: true, video: true }
+    const constraints = { audio: true, echoCancellation: true, video: true,aspectRatio: {ideal: 16/9} }
 
     const success = (stream) => {
       window.localStream = stream
-      this.localVideoref.current.srcObject = stream
+      this.localVideoref.current.srcObject = stream.getVideoTracks()
       // this.pc.addStream(stream)
       stream.getTracks().forEach(track => this.pc.addTrack(track, stream));
     }
