@@ -53,8 +53,12 @@ class App extends React.Component {
       query: {},
     });
 
+    this.socket.on('connect_error', err => {
+      console.log(err);
+    });
+
     this.socket.on('connection-success', success => {
-      console.log(success);
+      // console.log(success);
     });
 
     this.socket.on('offerOrAnswer', sdp => {
@@ -65,7 +69,7 @@ class App extends React.Component {
     });
 
     this.socket.on('candidate', candidate => {
-      console.log('From Peer... ', JSON.stringify(candidate))
+      // console.log('From Peer... ', JSON.stringify(candidate))
       // this.candidates = [...this.candidates, candidate]
       this.pc.addIceCandidate(new RTCIceCandidate(candidate));
     });
@@ -96,7 +100,7 @@ class App extends React.Component {
 
     // triggered when there is a change in connection state
     this.pc.oniceconnectionstatechange = e => {
-      console.log(e);
+      // console.log(e);
     };
 
     this.pc.onaddstream = e => {
@@ -123,7 +127,7 @@ class App extends React.Component {
 
     let isFront = true;
     mediaDevices.enumerateDevices().then(sourceInfos => {
-      console.log(sourceInfos);
+      // console.log(sourceInfos);
       let videoSourceId;
       for (let i = 0; i < sourceInfos.length; i++) {
         const sourceInfo = sourceInfos[i];
