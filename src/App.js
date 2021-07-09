@@ -70,10 +70,17 @@ class App extends Component {
     }
 
     const constraints = {
-      audio: true,
-      video: {
-        aspectRatio: { ideal: 16 / 9 },
-
+      // audio: true,
+      video: true,
+      // video: {
+      //   width: 1280,
+      //   height: 720
+      // },
+      // video: {
+      //   width: { min: 1280 },
+      // }
+      options: {
+        mirror: true,
       }
     }
 
