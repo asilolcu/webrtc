@@ -176,7 +176,7 @@ class App extends React.Component {
         this.pc.setLocalDescription(sdp)
 
         this.sendToPeer('offerOrAnswer', sdp)
-      })
+      }, e => { })
   }
 
   createAnswer = () => {
@@ -271,6 +271,7 @@ class App extends React.Component {
               <TouchableOpacity onPress={() => localStream._tracks[1]._switchCamera()}>
                 <View>
                   <RTCView
+                    mirror={true}
                     key={1}
                     zOrder={0}
                     objectFit='cover'

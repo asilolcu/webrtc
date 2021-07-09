@@ -14,7 +14,6 @@ class App extends Component {
   }
   
   componentDidMount = () => {
-
     this.socket = io.connect(
       'https://hudson-loon-37351.herokuapp.com',
       {
@@ -35,7 +34,7 @@ class App extends Component {
     })
 
     this.socket.on('candidate', (candidate) => {
-      // console.log('From Peer... ', JSON.stringify(candidate))
+      console.log('From Peer... ', JSON.stringify(candidate))
       // this.candidates = [...this.candidates, candidate]
       this.pc.addIceCandidate(new RTCIceCandidate(candidate))
     })
@@ -141,8 +140,8 @@ class App extends Component {
 
   addCandidate = () => {
     // retrieve and parse the Candidate copied from the remote peer
-    // const candidate = JSON.parse(this.textref.value)
-    // console.log('Adding candidate:', candidate)
+    const candidate = JSON.parse(this.textref.value)
+    console.log('Adding candidate:', candidate)
 
     // add the candidate to the peer connection
     this.candidates.forEach(candidate => {
