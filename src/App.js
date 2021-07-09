@@ -18,7 +18,7 @@ class App extends Component {
     this.socket = io(
       '/webrtcPeer',
       {
-        path: '/webrtc-1',
+        path: '/webrtc',
         query: {}
       }
     )
