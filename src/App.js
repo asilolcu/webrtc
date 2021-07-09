@@ -16,7 +16,7 @@ class App extends Component {
   componentDidMount() {
 
     this.socket = io(
-      'https://hudson-loon-37351.herokuapp.com',
+      '/webrtcPeer',
       {
         path: '/io/webrtc',
         query: {}
