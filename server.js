@@ -7,12 +7,13 @@ var io = require('socket.io')
 })
 
 const app = express()
-const port = process.env.PORT ||8080
+const port = process.env.PORT || 3000
 
 // app.get('/', (req, res) => res.send('Hello World!!!!!'))
 
 //https://expressjs.com/en/guide/writing-middleware.html
 app.use(express.static(__dirname + '/build'))
+
 app.get('/', (req, res, next) => {
     res.sendFile(__dirname + '/build/index.html')
 })

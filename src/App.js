@@ -6,13 +6,12 @@ class App extends Component {
     super(props)
 
     this.localVideoref = React.createRef()
-    this.localVideoref.muted = true
     this.remoteVideoref = React.createRef()
 
     this.socket = null
     this.candidates = []
   }
-  
+
   componentDidMount() {
 
     this.socket = io(
@@ -108,6 +107,7 @@ class App extends Component {
       .then(sdp => {
         this.pc.setLocalDescription(sdp)
         this.sendToPeer('offerOrAnswer', sdp)
+        console.log(sdp)
       }, e => { })
   }
 
@@ -144,42 +144,46 @@ class App extends Component {
     });
   }
 
-
-
   render() {
     return (
-      <div>
-        <video
-          style={{
-            width: 240, height: 240,
-            margin: 5, backgroundColor: 'black',
-            transform: [{ scaleX: -1 }]
-          }}
-          ref={this.localVideoref}
-          mirrorVideo={true}
-          autoPlay></video>
-        <video
-          style={{
-            width: 240, height: 240,
-            margin: 5, backgroundColor: 'black',
-            transform: [{ scaleX: -1 }]
-          }}
-          ref={this.remoteVideoref}
-          mirrorVideo={true}
-          autoPlay></video>
+      <div className='w-full'>
+        <main>
+          <div className='mx-auto p-40'>
+            <div className='grid grid-cols-2 gap-8'>
+              <div>
+                <video
+                  className='w-full h-full bg-black chatVideo'
+                  ref={this.localVideoref}
+                  autoPlay>
+                </video>
+              </div>
+              <div>
+                <video
+                  className='w-full h-full bg-black chatVideo'
+                  ref={this.localVideoref}
+                  autoPlay>
+                </video>
+              </div>
+            </div>
 
-        <br />
+            <div className='mt-4'>
+              <button className='bg-gray-700 rounded text-white p-1 w-24' onClick={this.createOffer} >
+                Offer
+              </button>
 
-        <button onClick={this.createOffer}>Offer</button>
-        <button onClick={this.createAnswer}>Answer</button>
+              <button className='bg-gray-700 rounded text-white p-1 h-full ml-2 w-24' onClick={this.createAnswer} >
+                Answer
+              </button>
 
-        <br />
-        <textarea ref={ref => { this.textref = ref }} />
+              <textarea className='w-full mt-4 p-1 bg-gray-300 rounded text-gray-700 focus:ring-2 focus:ring-blue-600' ref={ref => { this.textref = ref }} />
+            </div>
 
-        <br />
-        {/* <button onClick={this.setRemoteDescription}>Set Remote Desc</button>
-<button onClick={this.addCandidate}>Add Candidate</button> */}
+          </div>
 
+          {/* <button onClick={this.setRemoteDescription}>Set Remote Desc</button>
+        <button onClick={this.addCandidate}>Add Candidate</button> */}
+
+        </main>
       </div>
     );
   }
